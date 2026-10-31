@@ -32,4 +32,3 @@ class TestStudentGrade(TestCase):
         position = [0, 0]
         calculate_position(total, position, 2)
         self.assertEqual(position, [1, 1])
-
