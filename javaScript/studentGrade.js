@@ -1,69 +1,92 @@
-const userInput = require("prompt-sync")()
+const prompt = require('prompt-sync')();
 
-studentsNumber = userInput("How many students do u have? ");
-
-subjectsNumber = userInput("How many subjects do they offer? ");
-
-console.log("Saving >>>>>>>>>>>>>>>>>>>>>>>");
-
-
-
-    let[][] scores = new int[studentsNumber][subjectsNumber];
-    let[] total = new int[studentsNumber];
-    let[] position = new int[studentsNumber];
-
-        for(let index = 0; index < studentsNumber; index++){
-            console.log("Entering score for students " + (index + 1));
-            for(let count = 0; count < subjectsNumber; count++){
-                while(true){
-                console.log("Enter score for each students: " + (count + 1));
-                    let score = input.nextInt();
-                if(score >= 0 && score <= 100){
-                    scores[index][count] = score;
-                    total[index ] += score;
-                console.log("Saved Successfuly!!");
-                        break;
-                }
-                else{
-                console.log("Invalid score!, plz enter score between 0 to 100");        
-                }
-}       
-}
-}
-        for(let index = 0; index < studentsNumber; index++){
-            position[index] = 1;
-            for(let count = 0; count < studentsNumber; count++){
-                if(total[count] > total[index]){
-                    position[index]++;
-}
-}
+function getStudentsNumber() {
+    let n = Number(prompt("How many students? "));
+    return n;
 }
 
-console.log("\n===============================================================");
 
-console.log("\n          LAGBAJA SCHOOLS RESULT SUMMARY");
-
-console.log("\n===============================================================");
-
-console.log("%-14s", "STUDENT");
-
-    for(let count = 0; count < studentsNumber; count++){
-        System.out.printf("%9s", "SUB " + (count + 1));
+function getSubjectsNumber() {
+    let n = Number(prompt("How many subjects? "));
+    return n;
 }
-System.out.printf("%11s%11s%10s%n" , "TOTAL", "AVERAGE", "POSITION");
-
-console.log("\n===============================================================");
 
 
-        for(let count = 0; count < studentsNumber; count++){
-            let float(Average) = total[count] / subjectsNumber;
-            System.out.printf("%-14s", "Student" + (count + 1));
-        for(let index = 0; index < subjectsNumber; index++){
-            System.out.printf("%9d", scores[count][index]);
+function inputScores(scores, total, studentsNumber, subjectsNumber) {
+    for (let count = 0; count < studentsNumber; count++) {
+        for (let index = 0; index < subjectsNumber; index++) {
+            let score = Number(prompt("Enter score for student " + (count+1) + " subject " + (index+1) + ": "));
+
+            while (score < 0 || score > 100) {
+                console.log("Invalid score");
+                score = Number(prompt("Enter score for student " + (count+1) + " subject " + (index+1) + ": "));
+
+            }
+
+            scores[count][index] = score;
+            total[count] = total[count] + score;
+        }
+    }
 }
-        System.out.printf("%11d%11.2f%9d%n",
-             total[count], Average, position[count]);
+
+
+function calculatePosition(total, position, studentsNumber) {
+    for (let i = 0; i < studentsNumber; i++) {
+        position[i] = 1;
+        for (let j = 0; j < studentsNumber; j++) {
+            if (total[j] > total[i]) {
+                position[i] = position[i] + 1;
+            }
+        }
+    }
 }
+
+
+function displayResult(scores, total, position, studentsNumber, subjectsNumber) {
+    console.log("\n===============================================================")
+
+    console.log("\n          LAGBAJA SCHOOLS RESULT SUMMARY")
+
+    console.log("=================================================================");
+    let header = "STUDENT\t";
+    for (let count = 0; count < subjectsNumber; count++) {
+        header = header + "SUB" + (count + 1) + "\t";
+    }
+    header = header + "TOTAL\tAVERAGE\tPOSITION";
+    console.log(header);
+
+    for (let count = 0; count < studentsNumber; count++) {
+
+        let average = total[count] / subjectsNumber; 
+
+        let inner = "Student " + (count+1) + "\t";
+
+        for (let index = 0; index < subjectsNumber; index++) {
+
+            inner = inner + scores[count][index] + "\t";
+        }
+        inner = inner + total[count] + "\t" + average + "\t" + position[count];
+
+        console.log(inner);
+    }
 }
+
+let studentsNumber = getStudentsNumber();
+let subjectsNumber = getSubjectsNumber();
+let scores = [];
+let total = [];
+let position = [];
+for (let index = 0; index < studentsNumber; index++) {
+    scores[index] = [];
+    for (let count = 0; count < subjectsNumber; count++) {
+        scores[index][count] = 0;
+    }
+    total[index] = 0;
+    position[index] = 0;
 }
+
+
+inputScores(scores, total, studentsNumber, subjectsNumber);
+calculatePosition(total, position, studentsNumber);
+displayResult(scores, total, position, studentsNumber, subjectsNumber);
 
